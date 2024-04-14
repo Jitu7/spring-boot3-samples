@@ -1,10 +1,8 @@
 package com.example.restclientsamples.controller;
 
 import com.example.restclientsamples.model.User;
-import com.example.restclientsamples.proxy.JsonPlaceHolderApiProxy;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.restclientsamples.service.UserService;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -12,14 +10,29 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserRestController {
 
-    private final JsonPlaceHolderApiProxy proxy;
+    private final UserService userService;
 
-    public UserRestController(JsonPlaceHolderApiProxy proxy) {
-        this.proxy = proxy;
+    public UserRestController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
-    public List<User> getAllUser() {
-        return proxy.getUsers();
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable("id") int id) {
+        return userService.getUserById(id);
+    }
+
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userService.createUser(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUserById(@PathVariable("id") Integer id) {
+        userService.deleteUserById(id);
     }
 }
